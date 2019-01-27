@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+'''TODO:
+- add epochs, test, and validation steps.
+- add ability to save network.
+- refactor to more logical blocks.
+'''
+
 import os
 import re
 import json
