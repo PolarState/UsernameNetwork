@@ -61,7 +61,7 @@ class CharacterDataset(Dataset):
 
 
 	def __getitem__(self, idx):
-		if idx < len(self) - 1:
+		if idx < len(self):
 
 			# translate into encoding
 
@@ -79,3 +79,4 @@ class CharacterDataset(Dataset):
 			input_length = self.sequence_length_list[idx]
 
 			return inputs, label_seq, input_length
+

@@ -216,7 +216,7 @@ if __name__ == '__main__':
 	# pickle.dump(dataset, dasetfile)
 	# dasetfile.close()
 
-	batch_size = 10
+	batch_size = 2048
 
 	trainingCharDataloader = DataLoader(
 			dataset = dataset_train,
@@ -242,6 +242,7 @@ if __name__ == '__main__':
 	optimizer = optim.Adam(model.parameters(), lr=0.001)
 	loss_function = nn.CrossEntropyLoss(ignore_index=0)
 
+	print("Training Start")
 	for e in range(20):
 		val_loss = 0
 		train_loss = 0
@@ -263,6 +264,8 @@ if __name__ == '__main__':
 
 			optimizer.step()
 
+			print(f"{i*batch_size/len(dataset_train)*100}% idx: {idx}", end='\r')
+
 		for inputs, labels, input_length in valCharDataloader:
 
 			outputs = model(inputs, input_length)
@@ -273,8 +276,9 @@ if __name__ == '__main__':
 			labels_flat = labels.view(-1)
 
 			val_loss = loss_function(outputs_flat, labels_flat)
-			print(f"Train loss: {train_loss}")
-			print(f"Val loss: {val_loss}")
+		
+		print(f"Train loss: {train_loss}")
+		print(f"Val loss: {val_loss}")
 
 		torch.save(model.state_dict, f"./test_model_{i:02}")
 
