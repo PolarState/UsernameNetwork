@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
 			optimizer.step()
 
-			print(f"{i*batch_size/len(dataset_train)*100}% idx: {idx}", end='\r')
+			print(f"{i*batch_size/len(dataset_train)*100}% idx: {i}", end='\r')
 
 		for inputs, labels, input_length in valCharDataloader:
 
