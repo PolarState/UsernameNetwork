@@ -1,3 +1,10 @@
+# TODO:
+# 
+# Questions:
+# What is best practice for creating datasets for training/valudation/test?
+# 
+
+
 import re
 import torch
 
@@ -5,83 +12,28 @@ from torch.utils.data import Dataset
 
 class CharacterDataset(Dataset):
 
-	def __init__(self, corpus, delimiter):
+	def __init__(self, character_encoding, sequence_list, sequence_length_list):
+		'''
+		Args: 
+			character_encoding - 
+			sequence_list - 
+		'''
 
 		# list of unique characters for one-hot-encoding
-		self.character_encoding = self.__createUniqueCharacterList(corpus)
+		self.character_encoding = character_encoding
 
 		# list of sequences, where a sequence is whatever logical group 
 		#	of characters and could be a sentence, word, or paragraph.
-		self.sequence_list = self.__createPaddedSequenceList(corpus, delimiter)
-		
-		# length in characters of entire dataset corpus
-		# self.lenth = sum([len(s) for s in self.sequence_list])
+		self.sequence_list = sequence_list
 
-		# prepare for first sampling
-		# self.__reshuffle()
-
+		# list of original word lengths.
+		self.sequence_length_list = sequence_length_list
 
 	def vocabLength(self):
 		return len(self.character_encoding)
 
 	def sequenceLength(self):
 		return len(self.sequence_list[0])
-
-	def __reshuffle(self):
-		# if we need to 
-		print('__reshuffle')
-
-		shuffle(self.sequence_list)
-
-		self.shuffled_text = ''.join(self.sequence_list)
-
-	def __createUniqueCharacterList(self, text):
-		'''
-		create a list of unique characters that appear in text
-
-		Args:
-			text - to sample for unique characters from
-
-		Returns:
-			list of unique characters from text
-		'''
-		print('__createUniqueCharacterList')
-
-		# create a dictionary of characters used
-		unique_char_list = ['<pad>'] + sorted(set(text))# ensure that element 0 is padding
-
-		print(f'len(unique_char_list): {len(unique_char_list)}')
-		return(unique_char_list)
-
-
-	def __createPaddedSequenceList(self, text, delimiter):
-		'''
-		create list of sequences from the original text where a sequence is a
-			logical group of characters such as a paragraph, sentence, or name
-			in a list of names.
-
-		Args:
-			text - original text to create sequences from
-			delimiter - character or characters which delimit the sequences
-
-		Returns:
-			list of strings where each string is a 'sequence'
-		'''
-		print('__createPaddedSequenceList')
-		print('filter')
-		sequence_list = list(filter(lambda x: x != '', re.split(delimiter, text)))
-		print('length tensor')
-		self.sequence_length_list = torch.LongTensor([len(s) for s in sequence_list])
-		print('empty tensor')
-		padded_sequence_list = torch.zeros((len(sequence_list), self.sequence_length_list.max())
-											, dtype=torch.long)
-		print('fill tensor')
-		for idx, (seq, seq_len) in enumerate(zip(sequence_list, self.sequence_length_list)):
-			vectorized_list = [self.character_encoding.index(c) for c in seq]
-			padded_sequence_list[idx, :seq_len] = torch.LongTensor(vectorized_list)
-
-		return padded_sequence_list
-
 
 	def __sequenceToOneHotEncodng(self, sequence):
 
@@ -121,7 +73,8 @@ class CharacterDataset(Dataset):
 			input_seq[self.sequence_length_list[idx] - 1] = 0
 
 			# apply one hot encoding to the sequences (but not labels)
-			inputs = torch.tensor(self.__sequenceToOneHotEncodng(input_seq), dtype=torch.float)
+			# inputs = torch.tensor(self.__sequenceToOneHotEncodng(input_seq), dtype=torch.float)
+			inputs = self.__sequenceToOneHotEncodng(input_seq).clone().detach()
 
 			input_length = self.sequence_length_list[idx]
 

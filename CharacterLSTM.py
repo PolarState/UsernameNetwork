@@ -18,7 +18,7 @@ class CharacterLSTM(nn.Module):
 
 		self.linear = nn.Linear(hidden_dim, output_dim)
 
-		self.softmax = nn.Softmax()
+		self.softmax = nn.Softmax(dim=1)
 
 	def forward(self, inputs, input_lengths):
 		# lstm_inputs = inputs.view(len(inputs), 1, len(inputs[0]))
