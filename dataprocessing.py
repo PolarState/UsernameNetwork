@@ -247,6 +247,7 @@ if __name__ == '__main__':
 		val_loss = 0
 		train_loss = 0
 
+		count = 0
 		for i, (inputs, labels, input_length) in enumerate(trainingCharDataloader):
 
 			optimizer.zero_grad()
@@ -264,7 +265,8 @@ if __name__ == '__main__':
 
 			optimizer.step()
 
-			print(f"{i*batch_size/len(dataset_train)*100}% idx: {i}", end='\r')
+			count += 1
+			print(f"{count * batch_size / len(dataset_train) * 100}% idx: {count}                   ", end='\r')
 
 		for inputs, labels, input_length in valCharDataloader:
 
