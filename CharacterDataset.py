@@ -70,7 +70,8 @@ class CharacterDataset(Dataset):
 			label_seq = self.sequence_list[idx][1:].clone()
 
 			# sequence list is already padded so remove last character from input sequence
-			input_seq[self.sequence_length_list[idx] - 1] = 0
+			# -2 because the sequence has already been shotened by the slice operation above.
+			input_seq[self.sequence_length_list[idx] - 2] = 0
 
 			# apply one hot encoding to the sequences (but not labels)
 			# inputs = torch.tensor(self.__sequenceToOneHotEncodng(input_seq), dtype=torch.float)
