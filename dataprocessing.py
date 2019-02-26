@@ -63,7 +63,7 @@ def createPaddedSequenceList(text, delimiter, character_encoding):
 	print('length tensor')
 	sequence_length_list = torch.LongTensor([len(s) for s in sequence_list])
 	print('empty tensor')
-	padded_sequence_list = torch.zeros((len(sequence_list), sequence_length_list.max())
+	padded_sequence_list = torch.zeros((len(sequence_list), sequence_length_list.max() + 1)
 										, dtype=torch.long)
 	print('fill tensor')
 	for idx, (seq, seq_len) in enumerate(zip(sequence_list, sequence_length_list)):
@@ -221,13 +221,15 @@ if __name__ == '__main__':
 	trainingCharDataloader = DataLoader(
 			dataset = dataset_train,
 			batch_size = batch_size,
-			shuffle = True
+			shuffle = True,
+			drop_last = True
 		)
 	
 	valCharDataloader = DataLoader(
 			dataset = dataset_val,
 			batch_size = batch_size,
-			shuffle = True
+			shuffle = True,
+			drop_last = True
 		)
 
 	# print(f'hash a function: {hash(dataset.vocabLength)}')
