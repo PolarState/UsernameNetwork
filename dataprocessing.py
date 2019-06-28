@@ -284,7 +284,7 @@ if __name__ == '__main__':
 		print(f"Train loss: {train_loss}")
 		print(f"Val loss: {val_loss}")
 
-		torch.save(model.state_dict, f"./test_model_{i:02}")
+		torch.save(model.state_dict, f"./test_model_{e:02}")
 
 
 		
